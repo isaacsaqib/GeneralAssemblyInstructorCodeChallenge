@@ -1,5 +1,6 @@
 
 
+
 <form>
 	<input type="text" name="search-term">
 	<input type="submit" name="search">
@@ -7,12 +8,42 @@
 </form>
 
 <div id="results">
+<!-- <p id=ptag></p> -->
 	
 
 </div>
 
+<div id=movie-details>
+</div>
+
+
+
 
 <script>
+
+	document.getElementById("ptag").addEventListener('click', function(event){
+
+		var div1 = document.getElementById("ptag");
+		var align = div1.getAttribute("imdbid");
+		console.log(align)
+
+
+		var getMovieDetails = new XMLHttpRequest();
+		// getMovieDetails.addEventListener("load", function(event){
+		// 	var movie_details = JSON.parse(event.currentTarget.response)
+		// 	console.log(movie_details)
+
+		// })
+
+		getMovieDetails.open("GET", "http://www.omdbapi.com/?t=stars&plot=full")
+		getMovieDetails.send()
+		})
+
+
+
+
+
+
 	document.querySelector('input[type=submit]').addEventListener('click', function(event){
 		event.preventDefault();
 		search_term = document.querySelector('input[name=search-term]').value
@@ -24,9 +55,10 @@
 			var titles = results[i].Title
 			var years = results[i].Year
 			var imdbID = results[i].imdbID
-			document.getElementById("results").innerHTML += '<p> Title: ' + titles + '</p>'
-			document.getElementById("results").innerHTML += '<p> Year: ' + years + '</p>'
-			document.getElementById("results").innerHTML += '<p> Imdb ID: ' + imdbID + '</p>'
+			document.getElementById("results").innerHTML += '<p id=ptag imdbid=' + imdbID + ' > Title: ' + titles ; + '</p>'
+			document.getElementById("results").innerHTML += 'Year: ' + years ;
+			document.getElementById("ptag").setAttribute('imdbid', imdbID);
+
 
 			console.log(results)
     	}
@@ -37,15 +69,10 @@
 
 		});
 		getResults.open("GET", "http://www.omdbapi.com/?type=movie&s=" + search_term);
-		getResults.send();
-
-
-
-
+		getResults.send()
 	})
 
-
-
+	
 
 
 
