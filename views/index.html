@@ -1,13 +1,13 @@
 
 <link rel="stylesheet" type="text/css" href="./style.css">
 
+<h1>SEARCH FOR MOVIES!</h1>
 <!-- SEARCH FORM -->
 <form>
 	<input type="text" name="search-term">
 	<input type="submit" name="search">
 
 </form>
-
 <div id="results">
 <!--  RESULTS DIV/WHERE MOVIE RESULTS ARE GOING TO BE POPULATED-->
 
@@ -103,7 +103,7 @@ function movieTitleListener() {
 				var years = results[i].Year              // Setting attributes 
 				var imdbID = results[i].imdbID
 				document.getElementById("results").innerHTML += '<p name=movieTitle id=ptag'+i+' imdbid=' + imdbID + ' > Title: ' + titles ; + '</p>'
-				document.getElementById("results").innerHTML += 'Year: ' + years ;
+				document.getElementById("results").innerHTML += 'Year: ' + years + "<br><br><hr>" ;
 				document.getElementById("ptag"+i).setAttribute('imdbid', imdbID);
 				// CSS organization 
 
