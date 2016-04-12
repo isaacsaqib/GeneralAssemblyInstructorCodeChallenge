@@ -1,6 +1,6 @@
 
 
-
+<!-- SEARCH FORM -->
 <form>
 	<input type="text" name="search-term">
 	<input type="submit" name="search">
@@ -8,67 +8,139 @@
 </form>
 
 <div id="results">
-<!-- <p id=ptag></p> -->
-	
+<!--  RESULTS DIV/WHERE MOVIE RESULTS ARE GOING TO BE POPULATED-->
 
 </div>
 
 <div id=movie-details>
+
+<!-- MOVIE DETAILS DIV/WHERE SINGLE MOVIE DETAILS ARE GOING TO BE POPULATED  -->
 </div>
 
 
 
 
 <script>
+function addToFavorites() {
+	document.querySelector('button').addEventListener('click',function(event){
+		console.log("event fired")
+		var button = event.target;
+		var xhttp = new XMLHttpRequest();
+		xhttp.open("POST", "favorites", true);
+		xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+		xhttp.send("title="+button.dataset.title+"&year="+button.dataset.year+"");
+		}
+	)
+}
 
-	document.getElementById("ptag").addEventListener('click', function(event){
-
-		var div1 = document.getElementById("ptag");
-		var align = div1.getAttribute("imdbid");
-		console.log(align)
 
 
-		var getMovieDetails = new XMLHttpRequest();
-		// getMovieDetails.addEventListener("load", function(event){
-		// 	var movie_details = JSON.parse(event.currentTarget.response)
-		// 	console.log(movie_details)
 
-		// })
+// ADDING A LISTENER ONTO EACH MOVIE TITLE SO THAT WHEN IT IS CLICKED, MOVIE DETAILS DIV IS POPULATED
+function addListener() {
+	
+	var moviesArr = document.getElementsByName("movieTitle"); // finding movie title within dom 
+	for(var i=0; i < moviesArr.length; i++){ // creating a loop function for each title 
+	  moviesArr[i].addEventListener('click', function(event) { // adding the event listener to each title
 
-		getMovieDetails.open("GET", "http://www.omdbapi.com/?t=stars&plot=full")
-		getMovieDetails.send()
+		var movieid =this.getAttribute('imdbid') // saving the unique IMDBID of each movie
+		var getMovieDetails = new XMLHttpRequest(); // making the api call to get full movie details
+		getMovieDetails.addEventListener('load',function(event){ 
+			var movieDetails = JSON.parse(event.currentTarget.response) 
+			var movieYear = movieDetails.Year
+			var movieTitle = movieDetails.Title
+			var movieActors = movieDetails.Actors
+			var movieAwards = movieDetails.Awards
+			var movieDirector = movieDetails.Director    // {After parsing, setting all variables to respective attributes}
+			var movieGenre = movieDetails.Genre
+			var moviePlot = movieDetails.Plot
+			var movieRuntime = movieDetails.Runtime
+			var movieCountry = movieDetails.Country
+			document.getElementById("results").style.display = "none"; // hiding the other results when the title is clicked on
+			console.log(movieTitle)
+			document.getElementById("movie-details").innerHTML += '<button data-title="' +movieTitle+'" data-year="' + movieYear + '">Add to Favorites</button>';
+			document.getElementById("movie-details").innerHTML += '<p> Title: ' + movieTitle + '</p>';
+			document.getElementById("movie-details").innerHTML += '<p> Actors: ' + movieActors + '</p>';
+			document.getElementById("movie-details").innerHTML += '<p> Awards: ' + movieAwards + '</p>';
+			document.getElementById("movie-details").innerHTML += '<p> Director: ' + movieDirector + '</p>';
+			document.getElementById("movie-details").innerHTML += '<p> Genre: ' + movieGenre + '</p>';
+			document.getElementById("movie-details").innerHTML += '<p> Plot: ' + moviePlot + '</p>';
+			document.getElementById("movie-details").innerHTML += '<p> Runtime: ' + movieRuntime + '</p>';
+			document.getElementById("movie-details").innerHTML += '<p> Country: ' + movieCountry + '</p>';
+
+			addToFavorites();
+			// setting up CSS for all attributes
 		})
+		getMovieDetails.open("GET", "http://www.omdbapi.com/?i=" + movieid + "&plot=full"); // API call
+		getMovieDetails.send()
+	  })
+		document.querySelector('form').style.display = "none"
+	}
+
+}
+
+
+
+function addButtonListener(){
+	// var moviesArr = document.f("movieTitle");
+	var buttons = document.getElementsByTagName('button')
+	for (var i=0;i < buttons.length; i ++) {
+		buttons[i].addEventListener('click', function(event){
+
+
+		// xhttp.open("POST", "demo_post.asp", true);
+		// xhttp.send();	
+
+		})
+	}		
+	
+
+}
+
+function addButton() {
+	var moviesArr = document.getElementsByName("movieTitle"); // Adding a single button to favorite movie to all titles
+	var button = document.createElement("BUTTON")
+	for(var i=0; i < moviesArr.length; i++){
+	  	moviesArr[i].appendChild(button)
+	  }
+
+}
 
 
 
 
 
 
-	document.querySelector('input[type=submit]').addEventListener('click', function(event){
+
+
+
+	document.querySelector('input[type=submit]').addEventListener('click', function(event){ // Selecting the submit form
 		event.preventDefault();
-		search_term = document.querySelector('input[name=search-term]').value
-		var getResults = new XMLHttpRequest();
+
+		search_term = document.querySelector('input[name=search-term]').value // Getting the value of the search form
+		var getResults = new XMLHttpRequest(); // Making the request 
 		getResults.addEventListener("load", function(event){
-			var results = JSON.parse(event.currentTarget.response).Search
-			var list_array = results
-			for (var i = 0; i < list_array.length; i++) {
-			var titles = results[i].Title
-			var years = results[i].Year
-			var imdbID = results[i].imdbID
-			document.getElementById("results").innerHTML += '<p id=ptag imdbid=' + imdbID + ' > Title: ' + titles ; + '</p>'
-			document.getElementById("results").innerHTML += 'Year: ' + years ;
-			document.getElementById("ptag").setAttribute('imdbid', imdbID);
+			var results = JSON.parse(event.currentTarget.response).Search // Parsing the data that came back
+			var list_array = results 
+			for (var i = 0; i < list_array.length; i++) { // Making a loop for each single movie object that came back
+				var titles = results[i].Title
+				var years = results[i].Year              // Setting attributes 
+				var imdbID = results[i].imdbID
+				document.getElementById("results").innerHTML += '<p name=movieTitle id=ptag'+i+' imdbid=' + imdbID + ' > Title: ' + titles ; + '</p>'
+				document.getElementById("results").innerHTML += 'Year: ' + years ;
+				document.getElementById("ptag"+i).setAttribute('imdbid', imdbID);
+				// CSS organization 
 
 
-			console.log(results)
-    	}
 
-			// document.getElementById("results").innerHTML += '<p>' + results.Search.Title; + '</p>'
-			// document.getElementById("results").innerHTML += results.Search.Year;	
+				console.log(results)
+	    	}
 
+	    	addListener(); //function called to add listener on click of title to display movie details
+			addButtonListener();
 
 		});
-		getResults.open("GET", "http://www.omdbapi.com/?type=movie&s=" + search_term);
+		getResults.open("GET", "http://www.omdbapi.com/?type=movie&s=" + search_term);  // API call
 		getResults.send()
 	})
 

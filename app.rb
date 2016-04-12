@@ -1,21 +1,21 @@
 require 'sinatra'
 require 'json'
 
-  get '/' do
+  get '/' do  #root 
     File.read('views/index.html')
   end
 
-  get '/favorites' do
+  get '/favorites' do # GET request to read /favorites
     response.header['Content-Type'] = 'application/json'
-    File.read('data.json')
+    File.read('data.json') #reading from data.json
   end
 
-  post '/favorites' do
+  post '/favorites' do # POST request to write favorites to /favorites
     file = JSON.parse(File.read('data.json'))
-    unless params[:name] && params[:oid]
+    unless params[:title] && params[:year]
       return 'Invalid Request'
     end
-    movie = { name: params[:name], oid: params[:oid] }
+    movie = { title: params[:title], year: params[:year] }
     file << movie
     File.write('data.json',JSON.pretty_generate(file))
     movie.to_json
