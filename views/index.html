@@ -71,7 +71,7 @@ function movieTitleListener() {
 
 			addToFavorites(); 
 		})
-		getMovieDetails.open("GET", "http://www.omdbapi.com/?i=" + movieid + "&plot=full"); // API call
+		getMovieDetails.open("GET", "https://www.omdbapi.com/?i=" + movieid + "&plot=full"); // API call
 		getMovieDetails.send()
 	  })
 		document.querySelector('form').style.display = "none"
@@ -115,7 +115,7 @@ function movieTitleListener() {
 			addButtonListener();
 
 		});
-		getResults.open("GET", "http://www.omdbapi.com/?type=movie&s=" + search_term);  // API call
+		getResults.open("GET", "https://www.omdbapi.com/?type=movie&s=" + search_term);  // API call
 		getResults.send()
 	})
 
