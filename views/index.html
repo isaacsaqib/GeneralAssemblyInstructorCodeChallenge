@@ -8,6 +8,8 @@
 	<input type="submit" name="search">
 
 </form>
+
+<a href="/favorites"> Check Out Your Favorites </a>
 <div id="results">
 <!--  RESULTS DIV/WHERE MOVIE RESULTS ARE GOING TO BE POPULATED-->
 
@@ -29,7 +31,9 @@ function addToFavorites() {
 		postToFavorites.open("POST", "favorites", true); //posting to /favorites
 		postToFavorites.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 		postToFavorites.send("title="+button.dataset.title+"&year="+button.dataset.year+"");
+
 		//sending attributes through params to /favorites
+		alert('Added to Favorites!')
 		}
 	)
 }
