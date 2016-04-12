@@ -15,8 +15,8 @@ require 'json'
     unless params[:title] && params[:year]
       return 'Invalid Request'
     end
-    movie = { title: params[:title], year: params[:year] }
-    file << movie
+    movie = { title: params[:title], year: params[:year] } #setting attributes from POST request into movies object
+    file << movie #pushing movie object to our file
     File.write('data.json',JSON.pretty_generate(file))
-    movie.to_json
+    movie.to_json 
 end

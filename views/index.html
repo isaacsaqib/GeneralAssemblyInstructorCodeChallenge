@@ -22,13 +22,13 @@
 
 <script>
 function addToFavorites() {
-	document.querySelector('button').addEventListener('click',function(event){
-		console.log("event fired")
-		var button = event.target;
-		var xhttp = new XMLHttpRequest();
-		xhttp.open("POST", "favorites", true);
-		xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-		xhttp.send("title="+button.dataset.title+"&year="+button.dataset.year+"");
+	document.querySelector('button').addEventListener('click',function(event){ //adding listener on 'add to favorites' button
+		var button = event.target; // setting button to target that was clicked
+		var postToFavorites = new XMLHttpRequest();
+		postToFavorites.open("POST", "favorites", true); //posting to /favorites
+		postToFavorites.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+		postToFavorites.send("title="+button.dataset.title+"&year="+button.dataset.year+"");
+		//sending attributes through params to /favorites
 		}
 	)
 }
@@ -37,7 +37,7 @@ function addToFavorites() {
 
 
 // ADDING A LISTENER ONTO EACH MOVIE TITLE SO THAT WHEN IT IS CLICKED, MOVIE DETAILS DIV IS POPULATED
-function addListener() {
+function movieTitleListener() {
 	
 	var moviesArr = document.getElementsByName("movieTitle"); // finding movie title within dom 
 	for(var i=0; i < moviesArr.length; i++){ // creating a loop function for each title 
@@ -67,9 +67,9 @@ function addListener() {
 			document.getElementById("movie-details").innerHTML += '<p> Plot: ' + moviePlot + '</p>';
 			document.getElementById("movie-details").innerHTML += '<p> Runtime: ' + movieRuntime + '</p>';
 			document.getElementById("movie-details").innerHTML += '<p> Country: ' + movieCountry + '</p>';
+			// setting up HTML for all attributes
 
-			addToFavorites();
-			// setting up CSS for all attributes
+			addToFavorites(); 
 		})
 		getMovieDetails.open("GET", "http://www.omdbapi.com/?i=" + movieid + "&plot=full"); // API call
 		getMovieDetails.send()
@@ -80,31 +80,6 @@ function addListener() {
 }
 
 
-
-function addButtonListener(){
-	// var moviesArr = document.f("movieTitle");
-	var buttons = document.getElementsByTagName('button')
-	for (var i=0;i < buttons.length; i ++) {
-		buttons[i].addEventListener('click', function(event){
-
-
-		// xhttp.open("POST", "demo_post.asp", true);
-		// xhttp.send();	
-
-		})
-	}		
-	
-
-}
-
-function addButton() {
-	var moviesArr = document.getElementsByName("movieTitle"); // Adding a single button to favorite movie to all titles
-	var button = document.createElement("BUTTON")
-	for(var i=0; i < moviesArr.length; i++){
-	  	moviesArr[i].appendChild(button)
-	  }
-
-}
 
 
 
@@ -136,7 +111,7 @@ function addButton() {
 				console.log(results)
 	    	}
 
-	    	addListener(); //function called to add listener on click of title to display movie details
+	    	movieTitleListener(); //function called to add listener on click of title to display movie details
 			addButtonListener();
 
 		});
